@@ -33,8 +33,6 @@ exports.postBook = (req, res) => {
 
     const book = new Book({
         ...bookObject,
-        ratings: [],
-        averageRating: 0,
         userId: req.user.userId,
         imageUrl: url,
     })
