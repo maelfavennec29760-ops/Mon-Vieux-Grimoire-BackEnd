@@ -10,3 +10,14 @@ exports.getAllBook = (req, res) => {
     })
 }
 
+exports.getBookById = (req, res) => {
+    const bookId = req.params.id;
+    Book.findById(bookId)
+    .then((book) => {
+        res.status(200).json(book)
+    })
+    .catch((error) => {
+        res.status(500).json({ message: "Book loading error", error })
+    })
+}
+
