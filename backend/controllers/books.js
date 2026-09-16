@@ -31,6 +31,8 @@ exports.postBook = (req, res) => {
 
     const book = new Book({
         ...bookObject,
+        ratings: [],
+        averageRating: 0,
         userId: req.user.userId,
         imageUrl: url,
     })
@@ -40,5 +42,6 @@ exports.postBook = (req, res) => {
         })
         .catch((error) => {
             res.status(400).json({ error })
+            console.log(error)
         })
 }
