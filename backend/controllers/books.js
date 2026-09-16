@@ -86,3 +86,13 @@ exports.updateBook = (req, res) => {
         res.status(500).json({ message: "Internal error server" })
     })
 }
+
+exports.getBestRating = (req, res) => {
+    Book.find().sort({ averageRating: -1}).limit(3)
+    .then((bestRating) => {
+        res.status(200).json(bestRating)
+    })
+    .catch((error) => {
+        res.status(500).json({ message: "Failed to retrieve top-rated books", error })
+    })
+}
