@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.get('/', bookCtrl.getAllBook)
 router.get('/:id', bookCtrl.getBookById)
+router.put('/:id', tokenCtrl.token,multerCtrl.bookImageUpload.single("image"), imageCtrl.optimizeBookImage, bookCtrl.updateBook)
 router.post('/', tokenCtrl.token, multerCtrl.bookImageUpload.single("image"), imageCtrl.optimizeBookImage, bookCtrl.postBook)
 
 module.exports = router;

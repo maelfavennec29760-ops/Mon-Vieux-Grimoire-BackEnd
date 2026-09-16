@@ -3,6 +3,9 @@ const fs = require('fs').promises
 
 exports.optimizeBookImage = async (req, res, next) => {
     try {
+        if(!req.file){
+            return next();
+        }
         const imagePath = req.file.path
         const imageName = req.file.filename.substring(0, req.file.filename.lastIndexOf('.'));
         const newImageName = `${imageName}.webp`
