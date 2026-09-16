@@ -1,5 +1,7 @@
-const { renderToStaticMarkup } = require('react-dom/server')
-const Book = require('../models/Books')
+const { renderToStaticMarkup } = require('react-dom/server');
+const Book = require('../models/Books');
+const fs = require('fs').promises;
+const path = require('path');
 
 exports.getAllBook = (req, res) => {
     Book.find()
@@ -94,5 +96,36 @@ exports.getBestRating = (req, res) => {
     })
     .catch((error) => {
         res.status(500).json({ message: "Failed to retrieve top-rated books", error })
+    })
+}
+
+exports.deleteBook = (req, res) => {
+    const bookId = req.params.id;
+    const userId = req.user.userId
+    Book.findById(bookId)
+    .then((book) => {
+        if(!book) {
+            return res.status(404).json({ message: "404 | Book not found " })
+        }
+        if(userId !== book.userId) {
+            return res.status(403).json({ message: "Unauthorized book delete" })
+        }
+        const imageUrl = book.imageUrl;
+        const urlParts = imageUrl.split("/");
+        const filename = urlParts.at(-1);
+        const imagePath = path.join('uploads', 'books', filename)
+        Book.findByIdAndDelete(bookId)
+        .then(() => {
+            return fs.unlink(imagePath)
+        })
+        .then(() => {
+            res.status(200).json({ message: "Book deleted successfully" })
+        })
+        .catch((error) => {
+            res.status(500).json({ message: "Failed to delete book", error })
+        })
+    })
+    .catch((error) => {
+        res.status(500).json({ message: "Failed to delete book", error })
     })
 }
