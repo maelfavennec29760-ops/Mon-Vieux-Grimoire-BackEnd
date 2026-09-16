@@ -1,3 +1,4 @@
+const { renderToStaticMarkup } = require('react-dom/server')
 const Book = require('../models/Books')
 
 exports.getAllBook = (req, res) => {
@@ -21,3 +22,23 @@ exports.getBookById = (req, res) => {
     })
 }
 
+exports.postBook = (req, res) => {
+    const bookObject = JSON.parse(req.body.book);
+    const protocol = req.protocol;
+    const host = req.get('host');
+    const imgName = req.file.filename;
+    const url = `${protocol}://${host}/uploads/books/${imgName}`
+
+    const book = new Book({
+        ...bookObject,
+        userId: req.user.userId,
+        imageUrl: url,
+    })
+    book.save()
+        .then(() => {
+            res.status(201).json({ message: "Book created successfully" })
+        })
+        .catch((error) => {
+            res.status(400).json({ error })
+        })
+}
