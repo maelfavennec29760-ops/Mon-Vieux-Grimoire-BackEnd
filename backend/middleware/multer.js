@@ -1,6 +1,6 @@
 const multer = require('multer')
 
-const storage = multer.diskStorage({
+const storage = multer.memoryStorage({
     destination: 'uploads/books',
     filename: (req, file, cb) => {
         const uniqueName = `${Date.now()}-${file.originalname}`;

@@ -1,22 +1,23 @@
-const sharp = require('sharp')
-const fs = require('fs').promises
+const sharp = require('sharp');
+const path = require('path');
 
 exports.optimizeBookImage = async (req, res, next) => {
     try {
-        if(!req.file){
+        if (!req.file) {
             return next();
         }
-        const imagePath = req.file.path
-        const imageName = req.file.filename.substring(0, req.file.filename.lastIndexOf('.'));
-        const newImageName = `${imageName}.webp`
-        const newImagePath = `${req.file.destination}/${newImageName}`
-
-        await sharp(imagePath).resize({width: 600}).webp().toFile(newImagePath)
-        await fs.unlink(req.file.path); 
-        req.file.filename = newImageName
-        next()
+        const imageName = `${Date.now()}-${path.parse(req.file.originalname).name}.webp`;
+        const imagePath = path.join('uploads', 'books', imageName);
+        await sharp(req.file.buffer)
+            .resize({ width: 600 })
+            .webp()
+            .toFile(imagePath);
+            req.file.filename = imageName;
+            next();
+        } catch (error) {
+        console.error("ERREUR SHARP :", error);
+         res.status(500).json({
+            message: "Image optimization failed"
+        });
     }
-    catch (error) {
-        res.status(500).json({ message: "Image optimization failed", error })
-    }
-}   
+};

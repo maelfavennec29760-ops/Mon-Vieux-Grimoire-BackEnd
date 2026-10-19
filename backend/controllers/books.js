@@ -1,4 +1,4 @@
-const { renderToStaticMarkup } = require('react-dom/server');
+
 const Book = require('../models/Books');
 const fs = require('fs').promises;
 const path = require('path');

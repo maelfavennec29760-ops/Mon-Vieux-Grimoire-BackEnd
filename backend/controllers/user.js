@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('../models/User.js');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
@@ -36,7 +36,7 @@ exports.login = (req, res, next) => {
     .then((user) => {
 //Vérification de la présence de l'user dans MongoDB        
         if(!user) {
-            return res.statut(401).json({ message: "Invalid email or password" })
+            return res.status(401).json({ message: "Invalid email or password" })
         }
 //Compare le mdp        
         bcrypt.compare(req.body.password, user.password)
