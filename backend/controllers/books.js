@@ -9,7 +9,7 @@ exports.getAllBook = (req, res) => {
         res.status(200).json(books)
     })
     .catch((error) => {
-        res.status(500).json({ message: "Books loading error", error })
+        res.status(500).json({ error })
     })
 }
 
@@ -20,7 +20,7 @@ exports.getBookById = (req, res) => {
         res.status(200).json(book)
     })
     .catch((error) => {
-        res.status(500).json({ message: "Book loading error", error })
+        res.status(500).json({ error })
     })
 }
 
@@ -42,7 +42,6 @@ exports.postBook = (req, res) => {
         })
         .catch((error) => {
             res.status(400).json({ error })
-            console.log(error)
         })
 }
 
@@ -92,7 +91,7 @@ exports.updateBook = (req, res) => {
         })
     })
     .catch((error) => {
-        res.status(500).json({ message: "Internal error server", error })
+        res.status(500).json({ error })
     })
 }
 
@@ -102,7 +101,7 @@ exports.getBestRating = (req, res) => {
         res.status(200).json(bestRating)
     })
     .catch((error) => {
-        res.status(500).json({ message: "Failed to retrieve top-rated books", error })
+        res.status(500).json({ error })
     })
 }
 
@@ -129,11 +128,11 @@ exports.deleteBook = (req, res) => {
             res.status(200).json({ message: "Book deleted successfully" })
         })
         .catch((error) => {
-            res.status(500).json({ message: "Failed to delete book", error })
+            res.status(500).json({ error })
         })
     })
     .catch((error) => {
-        res.status(500).json({ message: "Failed to delete book", error })
+        res.status(500).json({ error })
     })
 }
 
@@ -172,6 +171,6 @@ exports.ratingBook = (req, res) => {
         }
     })
     .catch((error) => {
-        res.status(500).json({ message: "Failed to rate book", error })
+        res.status(500).json({ error })
     })
 }

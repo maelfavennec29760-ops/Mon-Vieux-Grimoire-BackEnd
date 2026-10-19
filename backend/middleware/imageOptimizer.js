@@ -15,9 +15,6 @@ exports.optimizeBookImage = async (req, res, next) => {
             req.file.filename = imageName;
             next();
         } catch (error) {
-        console.error("ERREUR SHARP :", error);
-         res.status(500).json({
-            message: "Image optimization failed"
-        });
+         res.status(500).json({ error });
     }
 };

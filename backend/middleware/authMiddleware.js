@@ -14,7 +14,7 @@ exports.token = (req, res, next) => {
         req.user = decoded;
         next();
     } catch (error) {
-        return res.status(403).json({ message: "Invalid or exprired token" });
+        return res.status(403).json({ error });
     }
 
 }
