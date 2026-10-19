@@ -74,16 +74,25 @@ exports.updateBook = (req, res) => {
                 ...req.body
             }
         }
+        delete updateBook._id
+        delete updateBook.userId
+        delete updateBook.ratings
+        delete updateBook.averageRating
+        const oldImgName = book.imageUrl.split("/").at(-1); 
         Book.findByIdAndUpdate(bookId, updateBook)
         .then(() => {
-            res.status(200).json({ message: "Book updated sucessfully" })
+            if(req.file) {
+                fs.unlink(path.join('uploads', 'books', oldImgName))
+                .catch((error) => console.error("Old image deletion failed:", error))
+            }
+            res.status(200).json({ message: "Book updated successfully" })
         })
-        .catch(() => {
-            res.status(500).json({ message: "Internal error server" })
+        .catch((error) => {
+            res.status(500).json({ error })
         })
     })
-    .catch(() => {
-        res.status(500).json({ message: "Internal error server" })
+    .catch((error) => {
+        res.status(500).json({ message: "Internal error server", error })
     })
 }
 
