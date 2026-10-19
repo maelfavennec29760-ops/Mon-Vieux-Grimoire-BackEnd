@@ -17,6 +17,9 @@ exports.getBookById = (req, res) => {
     const bookId = req.params.id;
     Book.findById(bookId)
     .then((book) => {
+        if(!book) {
+            return res.status(404).json({ message: "404 | Book not found" })
+        }
         res.status(200).json(book)
     })
     .catch((error) => {
