@@ -100,6 +100,8 @@ exports.updateBook = (req, res) => {
     })
 }
 
+
+
 exports.getBestRating = (req, res) => {
     Book.find().sort({ averageRating: -1}).limit(3)
     .then((bestRating) => {
@@ -143,17 +145,15 @@ exports.deleteBook = (req, res) => {
 
 exports.ratingBook = (req, res) => {
     const bookId = req.params.id;
-    const { userId, rating } = req.body;
+    const { rating } = req.body;
+    const userId = req.user.userId
     Book.findById(bookId)
     .then((book) => {
         if(!book){
             return res.status(404).json({ message: "404 | Book not found " })
         }
-        if(rating < 0 || rating > 5) {
-            return res.status(400).json({ message: "Rating must be between 0 and 5" })
-        }
-        if(userId !== req.user.userId) {
-            return res.status(403).json({ message: "Unauthorized rating"})
+        if(typeof rating!== 'number' || !Number.isInteger(rating) || rating < 0 || rating > 5) {
+            return res.status(400).json({ message: "Rating must be an integer between 0 and 5" })
         }
         const existingRating = book.ratings.find((rate) => rate.userId === userId)
         if(existingRating) {
@@ -171,11 +171,12 @@ exports.ratingBook = (req, res) => {
         return book.save()
     })
     .then((book) => {
-        if(book) {
         res.status(200).json(book)
-        }
     })
     .catch((error) => {
         res.status(500).json({ error })
     })
 }
+
+
+
