@@ -17,15 +17,12 @@ exports.signup = (req, res, next) => {
 //Enregistre l'user dans MongoDB
             user.save()
                 .then(() => {
-                    res.status(201).json({ message: "User created succesfully" })
-                })
-                .catch((error) => {
-                    res.status(400).json({ error })
-                })
+                    res.status(201).json({ message: "User created succesfully" })})
+                .catch((error) => { 
+                    res.status(400).json({ error })})
         }) 
-        .catch((error) => {
-            res.status(500).json({ error })
-        })
+        .catch((error) => { 
+            res.status(500).json({ error })})
 }
 
 //Login

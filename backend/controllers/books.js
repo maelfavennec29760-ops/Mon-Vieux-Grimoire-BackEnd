@@ -81,7 +81,9 @@ exports.updateBook = (req, res) => {
         delete updateBook.ratings
         delete updateBook.averageRating
         const oldImgName = book.imageUrl.split("/").at(-1); 
-        Book.findByIdAndUpdate(bookId, updateBook)
+        Book.findByIdAndUpdate(bookId, updateBook, {
+            runValidators: true
+        })
         .then(() => {
             if(req.file) {
                 fs.unlink(path.join('uploads', 'books', oldImgName))
